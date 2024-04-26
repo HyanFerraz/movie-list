@@ -1,8 +1,10 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import configuration from 'src/config/configuration';
+import { Movie } from './entity/movie.entity';
+import configuration from '../config/configuration';
 
+@Global()
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -16,6 +18,8 @@ import configuration from 'src/config/configuration';
         ...config.get<TypeOrmModuleOptions>('db'),
       }),
     }),
+    TypeOrmModule.forFeature([Movie]),
   ],
+  exports: [TypeOrmModule],
 })
 export class InfraModule {}
