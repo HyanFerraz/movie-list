@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { Repository } from 'typeorm';
@@ -21,20 +21,14 @@ export class MoviesService {
     if (movies.length > 0) {
       return movies;
     }
-    throw new HttpException(
-      'Movie list does not exists',
-      HttpStatus.NO_CONTENT,
-    );
+    throw new Error('Movie list does not exists');
   }
 
   async findOne(id: string) {
     try {
       return await this.repository.findOneBy({ id });
     } catch (err) {
-      throw new HttpException(
-        'Movie id does not exists',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new BadRequestException('Movie id does not exists');
     }
   }
 
@@ -43,7 +37,7 @@ export class MoviesService {
     if (updated.affected != 0) {
       return updated.affected;
     }
-    throw new HttpException('Movie id does not exists', HttpStatus.BAD_REQUEST);
+    throw new BadRequestException('Movie id does not exists');
   }
 
   async remove(id: string) {
@@ -51,6 +45,6 @@ export class MoviesService {
     if (deleted.affected != 0) {
       return deleted.affected;
     }
-    throw new HttpException('Movie id does not exists', HttpStatus.BAD_REQUEST);
+    throw new BadRequestException('Movie id does not exists');
   }
 }
