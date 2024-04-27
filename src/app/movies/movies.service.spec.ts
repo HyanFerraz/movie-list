@@ -13,7 +13,6 @@ class MockRepository {
 
 describe('MoviesService', () => {
   let service: MoviesService;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let repository: MockRepository;
 
   beforeEach(async () => {
