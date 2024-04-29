@@ -9,4 +9,8 @@ export default () => ({
     database: process.env.POSTGRES_DB,
     autoLoadEntities: true,
   },
+  jwt: {
+    secret: process.env.JWT_SECRET,
+    signOptions: { expiresIn: '1m' },
+  },
 });
