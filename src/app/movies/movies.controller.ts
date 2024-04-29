@@ -16,6 +16,8 @@ import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiHeader,
   ApiNoContentResponse,
   ApiOkResponse,
   ApiTags,
@@ -25,6 +27,12 @@ import { CacheInterceptor } from '@nestjs/cache-manager';
 
 @Controller('movies')
 @ApiTags('movies')
+@ApiHeader({
+  name: 'Authorization',
+  description: 'Bearer token',
+  required: true,
+})
+@ApiBearerAuth()
 @UseGuards(JwtGuard)
 @UseInterceptors(CacheInterceptor)
 export class MoviesController {

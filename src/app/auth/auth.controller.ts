@@ -1,6 +1,8 @@
 import {
   Body,
   Controller,
+  HttpCode,
+  HttpStatus,
   Post,
   Req,
   UseGuards,
@@ -11,6 +13,13 @@ import { AuthDto } from './dto/auth.dto';
 import { LocalGuard } from './guard/local.guard';
 import { Request } from 'express';
 import { JwtInterceptor } from './interceptors/jwt.interceptor';
+import {
+  ApiBody,
+  ApiConflictResponse,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
@@ -19,12 +28,28 @@ export class AuthController {
   @Post('login')
   @UseGuards(LocalGuard)
   @UseInterceptors(JwtInterceptor)
+  @ApiBody({
+    type: AuthDto,
+  })
+  @ApiOkResponse({
+    description: 'User Login',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Invalid credentials',
+  })
   async login(@Req() req: Request) {
     return req.user;
   }
 
   @Post('register')
   @UseInterceptors(JwtInterceptor)
+  @ApiCreatedResponse({
+    description: 'Create a new user in database',
+  })
+  @ApiConflictResponse({
+    description: 'Username or Email already exists in database',
+  })
+  @HttpCode(HttpStatus.CREATED)
   async register(@Body() payload: AuthDto) {
     return await this.authService.createUser(payload);
   }
