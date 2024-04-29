@@ -26,7 +26,7 @@ export class MoviesService {
 
   async findOne(id: string) {
     try {
-      const movie = this.repository.findOneBy({ id });
+      const movie = await this.repository.findOneBy({ id });
       if (movie) {
         return movie;
       }
