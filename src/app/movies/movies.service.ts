@@ -1,18 +1,23 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { Repository } from 'typeorm';
 import { Movie } from '../infra/entity/movie.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
 
 @Injectable()
 export class MoviesService {
   constructor(
     @InjectRepository(Movie)
     private readonly repository: Repository<Movie>,
+
+    @Inject(CACHE_MANAGER)
+    private cacheManager: Cache,
   ) {}
 
   async create(createMovieDto: CreateMovieDto) {
+    await this.cacheManager.del('/movies');
     return await this.repository.save(createMovieDto);
   }
 
@@ -37,6 +42,7 @@ export class MoviesService {
   }
 
   async update(id: string, dto: UpdateMovieDto) {
+    await this.cacheManager.reset();
     const updated = await this.repository.update(id, dto);
     if (updated.affected != 0) {
       return updated.affected;
@@ -45,6 +51,7 @@ export class MoviesService {
   }
 
   async remove(id: string) {
+    await this.cacheManager.reset();
     const deleted = await this.repository.delete({ id });
     if (deleted.affected != 0) {
       return deleted.affected;

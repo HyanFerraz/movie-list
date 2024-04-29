@@ -13,4 +13,7 @@ export default () => ({
     secret: process.env.JWT_SECRET,
     signOptions: { expiresIn: '1m' },
   },
+  redis: {
+    host: process.env.REDIS_HOST,
+  },
 });
