@@ -1,0 +1,34 @@
+services:
+  # Serviço para a aplicação Nest.js
+  nest-app:
+    container_name: app
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+      - redis
+    env_file:
+      - .env.local
+      
+  # Serviço para o banco de dados PostgreSQL
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: movies
+      POSTGRES_DB: movies
+
+  # Serviço para o Redis
+  redis:
+    container_name: redis
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
