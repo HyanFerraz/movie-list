@@ -8,6 +8,7 @@ import {
   Delete,
   HttpException,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
@@ -18,9 +19,11 @@ import {
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { JwtGuard } from '../auth/guard/jwt.guard';
 
 @Controller('movies')
 @ApiTags('movies')
+@UseGuards(JwtGuard)
 export class MoviesController {
   constructor(private readonly moviesService: MoviesService) {}
 
