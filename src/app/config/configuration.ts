@@ -7,6 +7,6 @@ export default () => ({
     username: process.env.POSTGRES_USER,
     password: process.env.POSTGRES_PASSWORD,
     database: process.env.POSTGRES_DB,
-    entities: [`${__dirname}/../infra/entity/*.{js,ts}`],
+    autoLoadEntities: true,
   },
 });

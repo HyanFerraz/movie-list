@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
@@ -41,7 +43,11 @@ export class MoviesController {
   })
   @ApiNoContentResponse({ description: 'Movie list does not exists' })
   async findAll() {
-    return await this.moviesService.findAll();
+    try {
+      return await this.moviesService.findAll();
+    } catch (err) {
+      throw new HttpException(err.message, HttpStatus.NO_CONTENT);
+    }
   }
 
   @Get(':id')

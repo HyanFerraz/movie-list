@@ -26,9 +26,13 @@ export class MoviesService {
 
   async findOne(id: string) {
     try {
-      return await this.repository.findOneBy({ id });
+      const movie = this.repository.findOneBy({ id });
+      if (movie) {
+        return movie;
+      }
+      throw new Error();
     } catch (err) {
-      throw new BadRequestException('Movie id does not exists');
+      throw new BadRequestException('Incorrect Movie id');
     }
   }
 
