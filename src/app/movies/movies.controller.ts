@@ -27,12 +27,7 @@ import { CacheInterceptor } from '@nestjs/cache-manager';
 
 @Controller('movies')
 @ApiTags('movies')
-@ApiHeader({
-  name: 'Authorization',
-  description: 'Bearer token',
-  required: true,
-})
-@ApiBearerAuth()
+@ApiBearerAuth('JWT auth')
 @UseGuards(JwtGuard)
 @UseInterceptors(CacheInterceptor)
 export class MoviesController {
